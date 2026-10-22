@@ -146,9 +146,22 @@
             background-position: 0 0, 10px 10px;
             opacity: 0.05;
         }
+
+        /* ===== PREMIUM ADDITIONS ===== */
+        img { -webkit-user-drag: none; }
+        .animate-fade-in { animation: fadeInUp .6s ease both; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        .shimmer-gold {
+            background: linear-gradient(110deg, #B59A5A 30%, #f3e5ab 50%, #B59A5A 70%);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+        .pulse-ring { animation: pulseRing 2s ease-out infinite; }
+        @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(226,207,157,.55); } 100% { box-shadow: 0 0 0 18px rgba(226,207,157,0); } }
     </style>
 </head>
-<body class="antialiased select-none">
+<body class="antialiased">
 
     <!-- MOBILE CONTAINER WRAPPER (CENTERED FOR DESKTOP, FULL MOBILE) -->
     <div class="max-w-md mx-auto min-h-screen bg-cream relative shadow-2xl overflow-hidden my-0 sm:my-4 sm:rounded-3xl border-0 sm:border-4 border-gold-500/30">
@@ -161,24 +174,17 @@
             </div>
         </div>
 
-        <!-- BACKGROUND VIDEO LAYER WITH FALLBACK PHOTO -->
-        <div class="fixed inset-0 pointer-events-none max-w-md mx-auto z-0 overflow-hidden">
-            <video id="bgVideo" autoplay loop muted playsinline class="w-full h-full object-cover filter brightness-[0.65] contrast-[1.05]">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-romantic-couple-walking-in-a-field-at-sunset-41368-large.mp4" type="video/mp4">
-                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Background Prewedding" class="w-full h-full object-cover">
-            </video>
-
-            <!-- Dark Gradient Vignette Overlay for Text Legibility -->
+        <!-- BACKGROUND VIDEO LAYER (video diatur lewat CONFIG di bagian script) -->
+        <div id="bgLayer" class="fixed inset-0 pointer-events-none max-w-md mx-auto z-0 overflow-hidden bg-sage-900 bg-cover bg-center">
+            <video id="bgVideo" autoplay loop muted playsinline preload="auto" class="w-full h-full object-cover" style="filter:brightness(.7) contrast(1.05)"></video>
             <div class="absolute inset-0 bg-gradient-to-b from-sage-900/80 via-sage-900/40 to-sage-900/90"></div>
-            
-            <!-- Floating Petals Canvas -->
             <canvas id="petalCanvas" class="absolute inset-0 z-10 pointer-events-none"></canvas>
         </div>
 
         <!-- FLOATING MUSIC CONTROLLER BUTTON -->
         <div id="musicControl" class="fixed top-5 right-5 z-40 hidden">
             <button id="toggleMusicBtn" onclick="toggleAudio()" class="w-11 h-11 rounded-full glass-dark text-gold-400 flex items-center justify-center shadow-lg border border-gold-500/40 hover:scale-110 active:scale-95 transition-all duration-300">
-                <i id="musicIcon" class="fa-solid fa-disc fa-spin text-lg"></i>
+                <i id="musicIcon" class="fa-solid fa-compact-disc fa-spin text-lg"></i>
             </button>
         </div>
 
@@ -223,10 +229,10 @@
         </div>
 
         <!-- ==================== MAIN CONTENT SECTION ==================== -->
-        <main id="mainContent" class="relative z-20 hidden min-h-screen pb-12">
+        <main id="mainContent" class="relative z-20 hidden min-h-screen pb-28">
 
             <!-- HERO / WELCOME SECTION -->
-            <section class="min-h-screen flex flex-col justify-between items-center text-center p-6 pt-12 relative">
+            <section id="home" class="min-h-screen flex flex-col justify-between items-center text-center p-6 pt-12 relative">
                 <div class="reveal-on-scroll mt-4">
                     <span class="font-script text-3xl text-gold-400 block mb-1">Walimatul 'Ursy</span>
                     <h2 class="font-cinzel text-xs tracking-[0.3em] uppercase text-cream/80">The Wedding Of</h2>
@@ -274,7 +280,7 @@
             </section>
 
             <!-- BRIDE & GROOM PROFILE SECTION -->
-            <section class="px-6 py-10 text-center space-y-10">
+            <section id="mempelai" class="px-6 py-10 text-center space-y-10">
                 <div class="reveal-on-scroll">
                     <h2 class="font-script text-4xl text-gold-400 mb-1">Mempelai Pria & Wanita</h2>
                     <p class="font-sans text-xs text-cream/80 tracking-widest uppercase">Tanpa mengurangi rasa hormat, kami mengundang Anda untuk menghadiri pernikahan kami</p>
@@ -355,7 +361,7 @@
             </section>
 
             <!-- EVENT DETAILS SECTION (AKAD & RESEPSI) -->
-            <section class="px-6 py-10 space-y-6">
+            <section id="acara" class="px-6 py-10 space-y-6">
                 <div class="text-center reveal-on-scroll">
                     <span class="font-script text-3xl text-gold-400">Rangkaian Acara</span>
                     <h2 class="font-cinzel text-xs text-cream/90 tracking-widest uppercase">Waktu & Tempat</h2>
@@ -460,131 +466,75 @@
                 </div>
             </section>
 
-            <!-- PHOTO GALLERY SECTION -->
-            <section class="px-6 py-10 reveal-on-scroll">
-                <div class="text-center mb-6">
-                    <span class="font-script text-3xl text-gold-400">Momen Bahagia</span>
-                    <h2 class="font-cinzel text-xs text-cream/90 tracking-widest uppercase">Galeri Foto</h2>
+            <!-- WEDDING VIDEO SECTION -->
+            <section id="video" class="px-6 py-10">
+                <div class="text-center mb-6 reveal-on-scroll">
+                    <span class="font-script text-3xl text-gold-400">Perjalanan Cinta Kami</span>
+                    <h2 class="font-cinzel text-xs text-cream/90 tracking-widest uppercase">Video Pernikahan</h2>
                 </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="arch-frame-sm overflow-hidden h-40 shadow-lg cursor-pointer transform hover:scale-105 transition-transform" onclick="openLightbox('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80')">
-                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=500&q=80" alt="Galeri 1" class="w-full h-full object-cover">
-                    </div>
-                    <div class="arch-frame-sm overflow-hidden h-40 shadow-lg cursor-pointer transform hover:scale-105 transition-transform" onclick="openLightbox('https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80')">
-                        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=500&q=80" alt="Galeri 2" class="w-full h-full object-cover">
-                    </div>
-                    <div class="arch-frame-sm overflow-hidden h-40 shadow-lg cursor-pointer transform hover:scale-105 transition-transform" onclick="openLightbox('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80')">
-                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=500&q=80" alt="Galeri 3" class="w-full h-full object-cover">
-                    </div>
-                    <div class="arch-frame-sm overflow-hidden h-40 shadow-lg cursor-pointer transform hover:scale-105 transition-transform" onclick="openLightbox('https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80')">
-                        <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=500&q=80" alt="Galeri 4" class="w-full h-full object-cover">
+                <div class="reveal-on-scroll">
+                    <div class="p-1.5 rounded-3xl bg-gradient-to-b from-gold-300 via-gold-500 to-gold-600 shadow-2xl">
+                        <div id="videoBox" class="relative rounded-[20px] overflow-hidden bg-black h-[420px] w-full">
+                            <img id="videoPoster" src="" alt="Poster video pernikahan" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-sage-900/80 via-sage-900/20 to-transparent"></div>
+                            <button onclick="playWeddingVideo()" aria-label="Putar video" class="absolute inset-0 flex flex-col items-center justify-center gap-3 text-cream">
+                                <span class="w-16 h-16 rounded-full shimmer-gold pulse-ring text-sage-900 flex items-center justify-center text-2xl shadow-xl">
+                                    <i class="fa-solid fa-play ml-1"></i>
+                                </span>
+                                <span class="text-[11px] tracking-[0.25em] uppercase">Putar Video</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- DIGITAL WEDDING GIFT SECTION WITH BANK LOGOS -->
-            <section class="px-6 py-10 reveal-on-scroll">
+            <!-- PHOTO GALLERY SECTION -->
+            <section id="galeri" class="px-6 py-10">
+                <div class="text-center mb-6 reveal-on-scroll">
+                    <span class="font-script text-3xl text-gold-400">Momen Bahagia</span>
+                    <h2 class="font-cinzel text-xs text-cream/90 tracking-widest uppercase">Galeri Foto</h2>
+                </div>
+                <div id="galleryGrid" class="grid grid-cols-2 gap-3 reveal-on-scroll"></div>
+            </section>
+
+            <!-- DIGITAL WEDDING GIFT SECTION -->
+            <section id="hadiah" class="px-6 py-10 reveal-on-scroll">
                 <div class="glass-card rounded-3xl p-6 text-center border-gold-500/40 shadow-xl">
                     <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-gold-500/20 text-gold-600 flex items-center justify-center text-xl">
                         <i class="fa-solid fa-gift"></i>
                     </div>
                     <h3 class="font-serif-title text-2xl font-bold text-sage-800 mb-1">Amplop Digital</h3>
                     <p class="text-xs text-slate-600 leading-relaxed mb-6">
-                        Doa restu Anda merupakan hadiah terindah bagi kami. Namun jika ingin memberikan tanda kasih berupa amplop digital, dapat dikirimkan melalui:
+                        Doa restu Anda merupakan hadiah terindah bagi kami. Namun jika ingin memberikan tanda kasih, dapat dikirimkan melalui:
                     </p>
-
-                    <!-- BANK BCA CARD WITH VECTOR LOGO -->
-                    <div class="bg-cream/90 rounded-2xl p-4 border border-gold-400/40 text-left mb-4 shadow-sm relative">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2">
-                                <svg class="h-6 w-auto" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="120" height="40" rx="6" fill="#00529C"/>
-                                    <path d="M22 13H15V27H22C24.5 27 26.5 25 26.5 22.5V17.5C26.5 15 24.5 13 22 13Z" stroke="white" stroke-width="2.5"/>
-                                    <text x="36" y="26" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="18">BCA</text>
-                                </svg>
-                                <span class="text-xs font-bold text-slate-700">Bank BCA</span>
-                            </div>
-                            <i class="fa-solid fa-credit-card text-gold-500 text-base"></i>
-                        </div>
-                        <p class="font-mono text-base font-bold text-sage-900 tracking-wider">7310293841</p>
-                        <p class="text-xs text-slate-500 mt-0.5">a.n Habib Yulianto</p>
-                        <button onclick="copyText('7310293841', 'BCA')" class="mt-3 w-full py-2 px-3 rounded-xl bg-sage-500 text-cream text-xs font-medium flex items-center justify-center gap-2 hover:bg-sage-600 transition-colors">
-                            <i class="fa-regular fa-copy"></i>
-                            <span>Salin Rekening BCA</span>
-                        </button>
-                    </div>
-
-                    <!-- E-WALLET DANA CARD WITH VECTOR LOGO -->
-                    <div class="bg-cream/90 rounded-2xl p-4 border border-gold-400/40 text-left mb-4 shadow-sm relative">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2">
-                                <svg class="h-6 w-auto" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="120" height="40" rx="6" fill="#118EEA"/>
-                                    <text x="22" y="27" fill="white" font-family="Arial, sans-serif" font-weight="900" font-size="20" letter-spacing="1">DANA</text>
-                                </svg>
-                                <span class="text-xs font-bold text-slate-700">DANA</span>
-                            </div>
-                            <i class="fa-solid fa-wallet text-gold-500 text-base"></i>
-                        </div>
-                        <p class="font-mono text-base font-bold text-sage-900 tracking-wider">081234567890</p>
-                        <p class="text-xs text-slate-500 mt-0.5">a.n Adiba Putri</p>
-                        <button onclick="copyText('081234567890', 'DANA')" class="mt-3 w-full py-2 px-3 rounded-xl bg-sage-500 text-cream text-xs font-medium flex items-center justify-center gap-2 hover:bg-sage-600 transition-colors">
-                            <i class="fa-regular fa-copy"></i>
-                            <span>Salin Nomor DANA</span>
-                        </button>
-                    </div>
-
-                    <!-- BANK MANDIRI CARD WITH VECTOR LOGO -->
-                    <div class="bg-cream/90 rounded-2xl p-4 border border-gold-400/40 text-left shadow-sm relative">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2">
-                                <svg class="h-6 w-auto" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="120" height="40" rx="6" fill="#003D79"/>
-                                    <path d="M15 13C17 13 18.5 14.5 18.5 16.5C18.5 18.5 17 20 15 20" fill="#F2A900"/>
-                                    <text x="28" y="26" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="15">mandırı</text>
-                                </svg>
-                                <span class="text-xs font-bold text-slate-700">Bank Mandiri</span>
-                            </div>
-                            <i class="fa-solid fa-building-columns text-gold-500 text-base"></i>
-                        </div>
-                        <p class="font-mono text-base font-bold text-sage-900 tracking-wider">1370019827364</p>
-                        <p class="text-xs text-slate-500 mt-0.5">a.n Habib Yulianto</p>
-                        <button onclick="copyText('1370019827364', 'Bank Mandiri')" class="mt-3 w-full py-2 px-3 rounded-xl bg-sage-500 text-cream text-xs font-medium flex items-center justify-center gap-2 hover:bg-sage-600 transition-colors">
-                            <i class="fa-regular fa-copy"></i>
-                            <span>Salin Rekening Mandiri</span>
-                        </button>
-                    </div>
+                    <div id="giftList" class="space-y-4"></div>
                 </div>
             </section>
 
-            <!-- RSVP & GUESTBOOK SECTION WITH COUNTER BADGES -->
-            <section class="px-6 py-10 reveal-on-scroll">
+            <!-- RSVP & UCAPAN SECTION -->
+            <section id="ucapan" class="px-6 py-10 reveal-on-scroll">
                 <div class="glass-card rounded-3xl p-6 border-gold-500/40 shadow-xl">
                     <div class="text-center mb-6">
                         <span class="font-script text-3xl text-gold-600">Konfirmasi Kehadiran</span>
                         <h2 class="font-cinzel text-xs text-sage-800 tracking-widest uppercase">RSVP & Ucapan</h2>
                     </div>
 
-                    <!-- RSVP ATTENDANCE COUNTER SUMMARY -->
                     <div class="grid grid-cols-2 gap-3 mb-6">
                         <div class="bg-green-500/10 border border-green-500/30 rounded-2xl p-3 text-center">
-                            <span id="countHadir" class="text-2xl font-bold text-green-700 block">1</span>
+                            <span id="countHadir" class="text-2xl font-bold text-green-700 block">0</span>
                             <span class="text-[10px] text-green-800 font-semibold uppercase tracking-wider">Tamu Hadir</span>
                         </div>
                         <div class="bg-red-500/10 border border-red-500/30 rounded-2xl p-3 text-center">
-                            <span id="countTidakHadir" class="text-2xl font-bold text-red-700 block">1</span>
+                            <span id="countTidakHadir" class="text-2xl font-bold text-red-700 block">0</span>
                             <span class="text-[10px] text-red-800 font-semibold uppercase tracking-wider">Tidak Hadir</span>
                         </div>
                     </div>
 
-                    <!-- RSVP FORM -->
                     <form id="rsvpForm" onsubmit="handleRSVP(event)" class="space-y-4">
                         <div>
                             <label class="block text-xs font-medium text-sage-800 mb-1">Nama Lengkap</label>
-                            <input type="text" id="rsvpName" required placeholder="Masukkan Nama Anda" class="w-full px-4 py-2.5 rounded-xl bg-cream border border-gold-400/50 text-xs focus:outline-none focus:border-gold-500 text-sage-900">
+                            <input type="text" id="rsvpName" required maxlength="60" placeholder="Masukkan Nama Anda" class="w-full px-4 py-2.5 rounded-xl bg-cream border border-gold-400/50 text-xs focus:outline-none focus:border-gold-500 text-sage-900">
                         </div>
-
                         <div>
                             <label class="block text-xs font-medium text-sage-800 mb-1">Konfirmasi Kehadiran</label>
                             <select id="rsvpStatus" required class="w-full px-4 py-2.5 rounded-xl bg-cream border border-gold-400/50 text-xs focus:outline-none focus:border-gold-500 text-sage-900">
@@ -593,40 +543,23 @@
                                 <option value="Tidak Hadir">Maaf, Saya Tidak Bisa Hadir</option>
                             </select>
                         </div>
-
                         <div>
                             <label class="block text-xs font-medium text-sage-800 mb-1">Ucapan & Doa</label>
-                            <textarea id="rsvpMessage" rows="3" required placeholder="Tuliskan ucapan dan doa terbaik untuk mempelai..." class="w-full px-4 py-2.5 rounded-xl bg-cream border border-gold-400/50 text-xs focus:outline-none focus:border-gold-500 text-sage-900"></textarea>
+                            <textarea id="rsvpMessage" rows="3" required maxlength="400" placeholder="Tuliskan ucapan dan doa terbaik untuk mempelai..." class="w-full px-4 py-2.5 rounded-xl bg-cream border border-gold-400/50 text-xs focus:outline-none focus:border-gold-500 text-sage-900"></textarea>
                         </div>
-
-                        <button type="submit" class="w-full py-3 rounded-xl bg-gold-500 text-sage-900 text-xs font-bold uppercase tracking-wider hover:bg-gold-400 transition-colors shadow-md">
+                        <button type="submit" class="w-full py-3 rounded-xl shimmer-gold text-sage-900 text-xs font-bold uppercase tracking-wider shadow-md">
                             Kirim Ucapan & Konfirmasi
                         </button>
+                        <a id="waShare" href="#" target="_blank" rel="noopener" class="hidden w-full py-2.5 rounded-xl bg-green-600 text-white text-xs font-medium items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp"></i><span>Kirim juga lewat WhatsApp ke mempelai</span>
+                        </a>
                     </form>
 
-                    <!-- GUESTBOOK COMMENTS LIST -->
                     <div class="mt-8 pt-6 border-t border-gold-400/30">
                         <h4 class="font-serif-title font-bold text-sage-800 text-sm mb-4">
-                            Ucapan Selamat (<span id="guestCount">2</span>)
+                            Ucapan Selamat (<span id="guestCount">0</span>)
                         </h4>
-
-                        <div id="guestbookList" class="space-y-3 max-h-60 overflow-y-auto pr-1">
-                            <div class="p-3 rounded-2xl bg-cream/80 border border-gold-400/30 text-xs">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-sage-900">Ahmad & Keluarga</span>
-                                    <span class="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Hadir</span>
-                                </div>
-                                <p class="text-slate-600">Selamat ya Habib & Adiba! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin!</p>
-                            </div>
-
-                            <div class="p-3 rounded-2xl bg-cream/80 border border-gold-400/30 text-xs">
-                                <div class="flex justify-between items-center mb-1">
-                                    <span class="font-bold text-sage-900">Siti Nurhaliza</span>
-                                    <span class="text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">Tidak Hadir</span>
-                                </div>
-                                <p class="text-slate-600">Barakallahulakuma! Maaf belum bisa hadir langsung, bahagia selalu kalian berdua!</p>
-                            </div>
-                        </div>
+                        <div id="guestbookList" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
                     </div>
                 </div>
             </section>
@@ -658,12 +591,29 @@
     </div>
 
     <!-- LIGHTBOX MODAL FOR GALLERY -->
-    <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4" onclick="closeLightbox()">
-        <img id="lightboxImage" src="" alt="Full View" class="max-w-full max-h-[85vh] rounded-2xl border-2 border-gold-400 shadow-2xl object-contain">
+    <div id="lightboxModal" class="fixed inset-0 z-[60] bg-black/90 hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <button onclick="closeLightbox()" aria-label="Tutup" class="absolute top-5 right-5 w-10 h-10 rounded-full glass-dark text-gold-300 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        <button onclick="lbMove(-1,event)" aria-label="Sebelumnya" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full glass-dark text-gold-300 flex items-center justify-center"><i class="fa-solid fa-chevron-left"></i></button>
+        <button onclick="lbMove(1,event)" aria-label="Berikutnya" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full glass-dark text-gold-300 flex items-center justify-center"><i class="fa-solid fa-chevron-right"></i></button>
+        <img id="lightboxImage" src="" alt="Foto" onclick="event.stopPropagation()" class="max-w-full max-h-[80vh] rounded-2xl border-2 border-gold-400 shadow-2xl object-contain">
+        <span id="lbCounter" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-gold-300 tracking-widest"></span>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
+    <nav id="bottomNav" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 hidden w-[calc(100%-2rem)] max-w-sm">
+        <div class="glass-dark rounded-full px-2 py-2 flex justify-around items-center shadow-2xl">
+            <a href="#home" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-solid fa-house"></i></a>
+            <a href="#mempelai" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-solid fa-heart"></i></a>
+            <a href="#acara" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-regular fa-calendar-days"></i></a>
+            <a href="#video" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-solid fa-film"></i></a>
+            <a href="#galeri" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-regular fa-images"></i></a>
+            <a href="#hadiah" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-solid fa-gift"></i></a>
+            <a href="#ucapan" class="w-11 h-11 flex flex-col items-center justify-center text-gold-300 text-sm"><i class="fa-regular fa-comments"></i></a>
+        </div>
+    </nav>
+
     <!-- TOAST NOTIFICATION -->
-    <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-sage-900 text-gold-300 border border-gold-500/50 px-5 py-2.5 rounded-full text-xs font-medium shadow-2xl transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2">
+    <div id="toastNotification" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-sage-900 text-gold-300 border border-gold-500/50 px-5 py-2.5 rounded-full text-xs font-medium shadow-2xl transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2">
         <i class="fa-solid fa-circle-check text-gold-400"></i>
         <span id="toastMessage">Pesan Toast</span>
     </div>
@@ -678,6 +628,61 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // =====================================================================
+        //  PENGATURAN — GANTI BAGIAN INI DENGAN DATA/MEDIA ASLI KALIAN
+        // =====================================================================
+        const CONFIG = {
+            // Video latar belakang (otomatis jalan, tanpa suara). Browser mencoba berurutan.
+            // Taruh file video kalian di folder "video/" di samping file HTML ini.
+            bgVideos: [
+                'video/prewedding.mp4',
+                'https://assets.mixkit.co/videos/preview/mixkit-romantic-couple-walking-in-a-field-at-sunset-41368-large.mp4'
+            ],
+            bgPoster: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+
+            // Video pengantin (bagian "Video Pernikahan", ada suara + kontrol).
+            // Isi 'youtube' dengan ID video YouTube (contoh: 'dQw4w9WgXcQ') kalau mau pakai YouTube.
+            weddingVideo: {
+                sources: [
+                    'video/pengantin.mp4',
+                    'https://assets.mixkit.co/videos/preview/mixkit-romantic-couple-walking-in-a-field-at-sunset-41368-large.mp4'
+                ],
+                youtube: '',
+                poster: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80'
+            },
+
+            // Foto galeri (boleh pakai file sendiri, mis. 'foto/1.jpg')
+            photos: [
+                'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80',
+                'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=900&q=80',
+                'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80',
+                'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=900&q=80',
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=80',
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80'
+            ],
+
+            // Rekening / e-wallet (nomor di bawah ini CONTOH — ganti dengan yang asli)
+            banks: [
+                { bank: 'BCA',     label: 'Bank BCA',     color: '#00529C', icon: 'fa-credit-card',       number: '7310293841',    name: 'Habib Yulianto' },
+                { bank: 'Mandiri', label: 'Bank Mandiri', color: '#003D79', icon: 'fa-building-columns',  number: '1370019827364', name: 'Habib Yulianto' },
+                { bank: 'DANA',    label: 'DANA',         color: '#118EEA', icon: 'fa-wallet',            number: '081234567890',  name: 'Adiba Putri' }
+            ],
+            // Alamat kirim hadiah (kosongkan '' kalau tidak dipakai)
+            giftAddress: '',
+
+            // Nomor WhatsApp mempelai (format 628xxxx) agar ucapan juga bisa dikirim ke WA. Kosongkan kalau tidak dipakai.
+            waNumber: '',
+            // (Opsional) URL Google Apps Script / webhook untuk menyimpan RSVP ke Google Sheets. Kosongkan kalau tidak dipakai.
+            rsvpEndpoint: '',
+
+            // Contoh ucapan awal. Kosongkan jadi [] kalau tidak mau ada contoh.
+            seedWishes: [
+                { name: 'Ahmad & Keluarga', status: 'Hadir', msg: 'Selamat ya Habib & Adiba! Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin!', ts: Date.now() - 86400000 * 2 },
+                { name: 'Siti Nurhaliza', status: 'Tidak Hadir', msg: 'Barakallahulakuma! Maaf belum bisa hadir langsung, bahagia selalu kalian berdua!', ts: Date.now() - 86400000 }
+            ]
+        };
+
+        const $ = (id) => document.getElementById(id);
         let mapInitialized = false;
 
         // 1. AUTO-DETECT GUEST NAME FROM URL QUERY PARAMETER (?to=Nama+Tamu)
@@ -688,6 +693,12 @@
                 document.getElementById('guestNameDisplay').innerText = guest;
                 document.getElementById('rsvpName').value = guest;
             }
+            initBgMedia();
+            renderGallery();
+            renderGifts();
+            loadWishes();
+            renderWishes();
+            initWeddingPoster();
             initPetalsCanvas();
             initIntersectionObserver();
         });
@@ -708,6 +719,8 @@
 
                 playAudio();
                 initLeafletMap();
+                $('bottomNav').classList.remove('hidden');
+                ensureBgVideo();
 
                 window.dispatchEvent(new Event('scroll'));
             }, 800);
@@ -782,7 +795,7 @@
         function updateMusicIcon(active) {
             const icon = document.getElementById('musicIcon');
             if (active) {
-                icon.className = 'fa-solid fa-disc fa-spin text-lg text-gold-400';
+                icon.className = 'fa-solid fa-compact-disc fa-spin text-lg text-gold-400';
             } else {
                 icon.className = 'fa-solid fa-compact-disc text-lg text-slate-400';
             }
@@ -812,90 +825,291 @@
             document.getElementById("cd-seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
         }, 1000);
 
-        // 6. COPY TO CLIPBOARD
-        function copyText(text, providerName) {
-            const tempInput = document.createElement('input');
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
+        // 6. MEDIA: VIDEO LATAR, VIDEO PENGANTIN, GALERI
+        function initBgMedia() {
+            const layer = $('bgLayer');
+            const v = $('bgVideo');
+            if (CONFIG.bgPoster) {
+                layer.style.backgroundImage = `url('${CONFIG.bgPoster}')`;
+                v.poster = CONFIG.bgPoster;
+            }
+            const list = CONFIG.bgVideos || [];
+            if (!list.length) { v.style.display = 'none'; return; }
+            list.forEach((u, i) => {
+                const s = document.createElement('source');
+                s.src = u;
+                s.type = 'video/mp4';
+                // kalau sumber terakhir pun gagal -> tampilkan foto latar saja
+                if (i === list.length - 1) s.addEventListener('error', () => { v.style.display = 'none'; });
+                v.appendChild(s);
+            });
+            v.load();
+            const p = v.play();
+            if (p && p.catch) p.catch(() => {});
+        }
 
-            showToast(`Nomor ${providerName} berhasil disalin!`);
+        function ensureBgVideo() {
+            const v = $('bgVideo');
+            if (v && v.paused) {
+                const p = v.play();
+                if (p && p.catch) p.catch(() => {});
+            }
+        }
+
+        function initWeddingPoster() {
+            const wv = CONFIG.weddingVideo || {};
+            $('videoPoster').src = wv.poster || CONFIG.bgPoster || '';
+        }
+
+        let musicWasOn = false;
+        function pauseMusicForVideo() {
+            musicWasOn = isPlaying;
+            if (isPlaying) { audio.pause(); isPlaying = false; updateMusicIcon(false); }
+        }
+        function resumeMusicAfterVideo() {
+            if (musicWasOn) { musicWasOn = false; playAudio(); }
+        }
+
+        function playWeddingVideo() {
+            const wv = CONFIG.weddingVideo || {};
+            const box = $('videoBox');
+            if (!wv.youtube && !(wv.sources && wv.sources.length)) { showToast('Video belum ditambahkan'); return; }
+
+            pauseMusicForVideo();
+
+            if (wv.youtube) {
+                const id = encodeURIComponent(wv.youtube);
+                box.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1" title="Video Pernikahan" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+                return;
+            }
+
+            box.innerHTML = '';
+            const el = document.createElement('video');
+            el.controls = true;
+            el.autoplay = true;
+            el.playsInline = true;
+            el.setAttribute('playsinline', '');
+            el.poster = wv.poster || '';
+            el.className = 'w-full h-full object-contain bg-black';
+            wv.sources.forEach((u, i) => {
+                const s = document.createElement('source');
+                s.src = u;
+                s.type = 'video/mp4';
+                if (i === wv.sources.length - 1) {
+                    s.addEventListener('error', () => {
+                        box.innerHTML = '<div class="w-full h-full flex items-center justify-center text-center text-xs text-cream/80 p-6">Video belum bisa dimuat.<br>Pastikan file video sudah ditempatkan dengan benar.</div>';
+                        resumeMusicAfterVideo();
+                    });
+                }
+                el.appendChild(s);
+            });
+            el.addEventListener('ended', resumeMusicAfterVideo);
+            el.addEventListener('pause', () => { if (!el.ended) resumeMusicAfterVideo(); });
+            el.addEventListener('play', () => { if (isPlaying) pauseMusicForVideo(); });
+            box.appendChild(el);
+            const p = el.play();
+            if (p && p.catch) p.catch(() => {});
+        }
+
+        let lbIndex = 0;
+        function renderGallery() {
+            const grid = $('galleryGrid');
+            grid.innerHTML = (CONFIG.photos || []).map((u, i) => {
+                const wide = i % 3 === 0;
+                return `<div class="${wide ? 'col-span-2 h-52 arch-frame-sm' : 'h-44 rounded-2xl'} overflow-hidden shadow-lg cursor-pointer border border-gold-400/40 active:scale-95 transition-transform" onclick="openLightbox(${i})">
+                    <img src="${escapeHtml(u)}" alt="Galeri ${i + 1}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                </div>`;
+            }).join('');
+        }
+
+        function openLightbox(i) {
+            lbIndex = i;
+            showLightbox();
+            const m = $('lightboxModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+        function showLightbox() {
+            const n = CONFIG.photos.length;
+            $('lightboxImage').src = CONFIG.photos[lbIndex];
+            $('lbCounter').innerText = `${lbIndex + 1} / ${n}`;
+        }
+        function lbMove(d, e) {
+            if (e) e.stopPropagation();
+            const n = CONFIG.photos.length;
+            lbIndex = (lbIndex + d + n) % n;
+            showLightbox();
+        }
+        function closeLightbox() {
+            const m = $('lightboxModal');
+            m.classList.remove('flex');
+            m.classList.add('hidden');
+        }
+        (function () {
+            let sx = 0;
+            const m = document.getElementById('lightboxModal');
+            m.addEventListener('touchstart', (e) => { sx = e.changedTouches[0].clientX; }, { passive: true });
+            m.addEventListener('touchend', (e) => {
+                const dx = e.changedTouches[0].clientX - sx;
+                if (Math.abs(dx) > 50) lbMove(dx < 0 ? 1 : -1);
+            }, { passive: true });
+            document.addEventListener('keydown', (e) => {
+                if (m.classList.contains('hidden')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') lbMove(-1);
+                if (e.key === 'ArrowRight') lbMove(1);
+            });
+        })();
+
+        // 7. AMPLOP DIGITAL / REKENING
+        function renderGifts() {
+            let html = (CONFIG.banks || []).map((b, i) => `
+                <div class="bg-cream/90 rounded-2xl p-4 border border-gold-400/40 text-left shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 h-7 rounded-md flex items-center text-white text-[11px] font-bold tracking-wider" style="background:${escapeHtml(b.color || '#556B5D')}">${escapeHtml(b.bank)}</span>
+                            <span class="text-xs font-bold text-slate-700">${escapeHtml(b.label || b.bank)}</span>
+                        </div>
+                        <i class="fa-solid ${escapeHtml(b.icon || 'fa-credit-card')} text-gold-500 text-base"></i>
+                    </div>
+                    <p class="font-mono text-base font-bold text-sage-900 tracking-wider select-all">${escapeHtml(b.number)}</p>
+                    <p class="text-xs text-slate-500 mt-0.5">a.n ${escapeHtml(b.name)}</p>
+                    <button onclick="copyBank(${i})" class="mt-3 w-full py-2 px-3 rounded-xl bg-sage-500 text-cream text-xs font-medium flex items-center justify-center gap-2 hover:bg-sage-600 transition-colors">
+                        <i class="fa-regular fa-copy"></i><span>Salin Nomor ${escapeHtml(b.bank)}</span>
+                    </button>
+                </div>`).join('');
+            if (CONFIG.giftAddress) {
+                html += `<div class="bg-cream/90 rounded-2xl p-4 border border-gold-400/40 text-left shadow-sm">
+                    <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-box-open text-gold-600"></i><span class="text-xs font-bold text-slate-700">Kirim Hadiah</span></div>
+                    <p class="text-xs text-slate-600 leading-relaxed">${escapeHtml(CONFIG.giftAddress)}</p>
+                    <button onclick="copyText(CONFIG.giftAddress, 'Alamat')" class="mt-3 w-full py-2 px-3 rounded-xl bg-sage-500 text-cream text-xs font-medium flex items-center justify-center gap-2"><i class="fa-regular fa-copy"></i><span>Salin Alamat</span></button>
+                </div>`;
+            }
+            $('giftList').innerHTML = html;
+        }
+
+        function copyBank(i) {
+            const b = CONFIG.banks[i];
+            copyText(b.number, b.bank);
+        }
+
+        function copyText(text, providerName) {
+            const done = () => showToast(`${providerName} berhasil disalin!`);
+            const fallback = () => {
+                const t = document.createElement('textarea');
+                t.value = text;
+                t.style.position = 'fixed';
+                t.style.opacity = '0';
+                document.body.appendChild(t);
+                t.select();
+                try { document.execCommand('copy'); done(); } catch (e) { showToast('Gagal menyalin, silakan salin manual'); }
+                document.body.removeChild(t);
+            };
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(done).catch(fallback);
+            } else {
+                fallback();
+            }
         }
 
         function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = msg;
+            const toast = $('toastNotification');
+            $('toastMessage').innerText = msg;
             toast.classList.remove('opacity-0', 'pointer-events-none');
             toast.classList.add('opacity-100');
-
-            setTimeout(() => {
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(() => {
                 toast.classList.remove('opacity-100');
                 toast.classList.add('opacity-0', 'pointer-events-none');
             }, 3000);
         }
 
-        // 7. RSVP & COUNTER SUBMISSION
-        let countHadirVal = 1;
-        let countTidakHadirVal = 1;
+        // 8. RSVP & UCAPAN (tersimpan di browser tamu; lihat catatan di bawah)
+        const STORE_KEY = 'undangan_habib_adiba_ucapan_v1';
+        let wishes = [];
+
+        function loadWishes() {
+            try {
+                const raw = localStorage.getItem(STORE_KEY);
+                if (raw) { wishes = JSON.parse(raw); return; }
+            } catch (e) {}
+            wishes = (CONFIG.seedWishes || []).slice();
+        }
+        function saveWishes() {
+            try { localStorage.setItem(STORE_KEY, JSON.stringify(wishes)); } catch (e) {}
+        }
+
+        function timeAgo(ts) {
+            const s = Math.floor((Date.now() - ts) / 1000);
+            if (s < 60) return 'baru saja';
+            const m = Math.floor(s / 60);
+            if (m < 60) return m + ' menit lalu';
+            const h = Math.floor(m / 60);
+            if (h < 24) return h + ' jam lalu';
+            return Math.floor(h / 24) + ' hari lalu';
+        }
+
+        function renderWishes() {
+            $('guestbookList').innerHTML = wishes.map((w) => {
+                const hadir = w.status === 'Hadir';
+                const badge = hadir ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                const initial = escapeHtml((w.name || '?').trim().charAt(0).toUpperCase());
+                return `<div class="p-3 rounded-2xl bg-cream/80 border border-gold-400/30 text-xs animate-fade-in">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 shrink-0 rounded-full bg-sage-500 text-gold-300 flex items-center justify-center font-bold">${initial}</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-center gap-2 mb-1">
+                                <span class="font-bold text-sage-900 truncate">${escapeHtml(w.name)}</span>
+                                <span class="text-[10px] ${badge} px-2 py-0.5 rounded-full font-medium whitespace-nowrap">${escapeHtml(w.status)}</span>
+                            </div>
+                            <p class="text-slate-600 break-words">${escapeHtml(w.msg)}</p>
+                            <p class="text-[10px] text-slate-400 mt-1">${timeAgo(w.ts)}</p>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            $('guestCount').innerText = wishes.length;
+            $('countHadir').innerText = wishes.filter(w => w.status === 'Hadir').length;
+            $('countTidakHadir').innerText = wishes.filter(w => w.status !== 'Hadir').length;
+        }
 
         function handleRSVP(e) {
             e.preventDefault();
-            const name = document.getElementById('rsvpName').value;
-            const status = document.getElementById('rsvpStatus').value;
-            const msg = document.getElementById('rsvpMessage').value;
-
+            const name = $('rsvpName').value.trim();
+            const status = $('rsvpStatus').value;
+            const msg = $('rsvpMessage').value.trim();
             if (!name || !status || !msg) return;
 
-            const list = document.getElementById('guestbookList');
-            const countElem = document.getElementById('guestCount');
-            let currentCount = parseInt(countElem.innerText) || 0;
+            const entry = { name, status, msg, ts: Date.now() };
+            wishes.unshift(entry);
+            saveWishes();
+            renderWishes();
 
-            if (status === 'Hadir') {
-                countHadirVal++;
-                document.getElementById('countHadir').innerText = countHadirVal;
-            } else {
-                countTidakHadirVal++;
-                document.getElementById('countTidakHadir').innerText = countTidakHadirVal;
+            if (CONFIG.rsvpEndpoint) {
+                try {
+                    fetch(CONFIG.rsvpEndpoint, {
+                        method: 'POST', mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(entry)
+                    });
+                } catch (err) {}
+            }
+            if (CONFIG.waNumber) {
+                const text = `Assalamu'alaikum, saya ${name} (${status}).\n\n${msg}`;
+                const a = $('waShare');
+                a.href = `https://wa.me/${CONFIG.waNumber}?text=${encodeURIComponent(text)}`;
+                a.classList.remove('hidden');
+                a.classList.add('flex');
             }
 
-            const statusClass = status === 'Hadir' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-
-            const newCard = document.createElement('div');
-            newCard.className = 'p-3 rounded-2xl bg-cream/80 border border-gold-400/30 text-xs animate-fade-in';
-            newCard.innerHTML = `
-                <div class="flex justify-between items-center mb-1">
-                    <span class="font-bold text-sage-900">${escapeHtml(name)}</span>
-                    <span class="text-[10px] ${statusClass} px-2 py-0.5 rounded-full font-medium">${status}</span>
-                </div>
-                <p class="text-slate-600">${escapeHtml(msg)}</p>
-            `;
-
-            list.prepend(newCard);
-            countElem.innerText = currentCount + 1;
-
-            document.getElementById('rsvpMessage').value = '';
-            showToast('Terima kasih! Konfirmasi berhasil dikirim.');
+            $('rsvpMessage').value = '';
+            showToast('Terima kasih! Ucapan Anda berhasil dikirim.');
         }
 
         function escapeHtml(text) {
-            return text.replace(/[&<>"']/g, function(m) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]; });
-        }
-
-        // 8. LIGHTBOX GALLERY
-        function openLightbox(imgUrl) {
-            const modal = document.getElementById('lightboxModal');
-            const img = document.getElementById('lightboxImage');
-            img.src = imgUrl;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeLightbox() {
-            const modal = document.getElementById('lightboxModal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
+            return String(text == null ? '' : text).replace(/[&<>"']/g, function (m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
         }
 
         // 9. INTERSECTION OBSERVER FOR SCROLL ANIMATIONS
@@ -964,4 +1178,4 @@
         }
     </script>
 </body>
-</html> 
+</html>
